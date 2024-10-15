@@ -8,7 +8,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="home-page">
+<body>
     <!-- Navbar -->
     <header>
         <h1>Welcome to Our Laundry Service</h1>

@@ -4,7 +4,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="home-page">
+<body>
     <!-- Navbar -->
     <header>
         <h1>Welcome to Our Laundry Service</h1>
@@ -115,7 +115,9 @@
                     <tbody>
                         @foreach ($orders as $order)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <td class="px-4 py-3">{{ $order->customer->name }}</td>
+                                {{-- <td class="px-4 py-3">{{ $order->customer->name }}</td> --}}
+                                <td class="px-4 py-3">{{ $order->customer ? $order->customer->name : 'No Customer' }}</td>
+
                                 <td class="px-4 py-3">{{ $order->service->service_name }}</td>
                                 <td class="px-4 py-3">{{ \Carbon\Carbon::parse($order->order_date)->format('d M Y') }}</td>
                                 <td class="px-4 py-3">{{ $order->status }}</td>
