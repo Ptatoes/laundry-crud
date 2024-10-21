@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CustomerController extends Controller
 {
@@ -39,14 +40,15 @@ class CustomerController extends Controller
 
     public function store(Request $request)
 {
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:customers',
-        'phone_number' => 'required|string|max:15',
-    ]);
+   // Validate the form data
+   $validated = $request->validate([
+    'name' => 'required|string|max:255',
+    'email' => ['required', 'email', Rule::unique('customers', 'email')], // Ensure email is unique in customers table
+    'phone_number' => 'required|string|max:15',
+]);
 
-    // Create a new customer record
-    Customer::create($validatedData);
+// If validation passes, create the customer
+Customer::create($validated);
 
     // Redirect to the index page with success message
     return redirect()->route('customers.index')->with('success', 'Customer created successfully');

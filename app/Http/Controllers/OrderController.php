@@ -17,56 +17,44 @@ class OrderController extends Controller
         return view('orders.create', compact('customers', 'services'));
     }
 
-    // public function edit($id)
-    // {
-    //     $order = Order::findOrFail($id);
-    //     $customers = Customer::all(); // Fetch all customers
-    //     $services = Service::all();   // Fetch all services
-
-    //     return view('orders.edit', compact('order', 'customers', 'services'));
-    // }
     public function edit($id)
-{
-    // Fetch the order using the given ID
-    $order = Order::findOrFail($id);
-    
-    // Fetch customers and services if necessary
-    $customers = Customer::all();
-    $services = Service::all();
+    {
+        // Fetch the order using the given ID
+        $order = Order::findOrFail($id);
+        
+        // Fetch customers and services if necessary
+        $customers = Customer::all();
+        $services = Service::all();
 
-    // Pass the order, customers, and services to the view
-    return view('orders.edit', compact('order', 'customers', 'services'));
-}
-
-
-
-public function update(Request $request, Order $order)
-{
-    // Validate the incoming data
-    $validatedData = $request->validate([
-        'customer_id' => 'required|exists:customers,id',
-        'service_id' => 'required|exists:services,id',
-        'order_date' => 'required|date',
-        'status' => 'required|string',
-        'weight' => 'required|numeric',
-        'price' => 'required|numeric',
-        // 'date_taken' is optional if "Pending" is checked
-        'date_taken' => 'nullable|date'
-    ]);
-
-    // If pending is checked, set date_taken to null
-    if (isset($request->pending)) {
-        $validatedData['date_taken'] = null;
+        // Pass the order, customers, and services to the view
+        return view('orders.edit', compact('order', 'customers', 'services'));
     }
 
-    // Update the order with validated data
-    $order->update($validatedData);
+    public function update(Request $request, Order $order)
+    {
+        // Validate the incoming data
+        $validatedData = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'service_id' => 'required|exists:services,id',
+            'order_date' => 'required|date',
+            'status' => 'required|string',
+            'weight' => 'required|numeric',
+            'price' => 'required|numeric',
+            'date_taken' => 'nullable|date' // 'date_taken' is optional
+        ]);
 
-    // Redirect or return a response
-    return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
-}
+        // If pending is checked, set date_taken to null
+        if (isset($request->pending)) {
+            $validatedData['date_taken'] = null;
+        }
 
-    
+        // Update the order with validated data
+        $order->update($validatedData);
+
+        // Redirect or return a response
+        return redirect()->route('orders.index')->with('success', 'Order updated successfully!');
+    }
+
     public function index(Request $request)
     {
         $query = Order::query();
@@ -86,34 +74,31 @@ public function update(Request $request, Order $order)
     
         return view('orders.index', compact('orders'));
     }
-    
 
     public function store(Request $request)
-{
-    // Validate request data
-    $validatedData = $request->validate([
-        'customer_id' => 'required|exists:customers,id',
-        'service_id' => 'required|exists:services,id',
-        'order_date' => 'required|date',
-        'status' => 'required|string',
-        'weight' => 'required|numeric',
-        'price' => 'required|numeric', // If you're saving price, make sure it's validated
-        // Only require date_taken if pending is unchecked
-        'date_taken' => 'nullable|date' // Remove required_if for clarity
-    ]);
+    {
+        // Validate request data
+        $validatedData = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'service_id' => 'required|exists:services,id',
+            'order_date' => 'required|date',
+            'status' => 'required|string',
+            'weight' => 'required|numeric',
+            'price' => 'required|numeric', // If you're saving price, make sure it's validated
+            'date_taken' => 'nullable|date' // Remove required_if for clarity
+        ]);
 
-    // Handle the "Pending" logic if necessary
-    if (isset($request->pending)) {
-        // If pending, set date_taken to null or handle accordingly
-        $validatedData['date_taken'] = null;
+        // Handle the "Pending" logic if necessary
+        if (isset($request->pending)) {
+            // If pending, set date_taken to null or handle accordingly
+            $validatedData['date_taken'] = null;
+        }
+
+        // Create the order
+        Order::create($validatedData);
+
+        return redirect()->route('orders.index')->with('success', 'Order created successfully.');
     }
-
-    // Create the order
-    Order::create($validatedData);
-
-    return redirect()->route('orders.index')->with('success', 'Order created successfully.');
-}
-
 
     public function destroy($id)
     {

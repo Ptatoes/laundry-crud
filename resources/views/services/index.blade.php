@@ -1,21 +1,12 @@
 @extends('layouts.app')
 
 <head>
-    @vite(['resources/css/app.css','resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="home-page">
-    <!-- Navbar -->
-    <header>
-        <h1>Welcome to Our Laundry Service</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ route('customers.index') }}">Customers</a></li>
-                <li><a href="{{ route('orders.index') }}">Orders</a></li>
-                <li><a href="{{ route('services.index') }}">Services</a></li>
-            </ul>
-        </nav>
-    </header>
+   <!-- Include the Navbar -->
+   @include('layouts.navbar')
 
     @section('content')
     <section>
@@ -45,7 +36,7 @@
                             <!-- Search Button -->
                             <button 
                                 type="submit" 
-                                class="back-btn ml-2 px-4 py-2 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm  hover:bg-primary-1000"
+                                class="back-btn ml-2 px-4 py-2 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm"
                             >
                                 Search
                             </button>
@@ -63,10 +54,11 @@
                      <!-- Add Orders Button -->
                 <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                     <button 
-                        type="button" 
-                        onclick="window.location='{{ route('services.create') }}'" 
-                        class="flex items-center justify-center text-white focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:focus:ring-primary-800"
-                        style="background-color: #8c6a4a; hover:bg-opacity-90;"
+                    type="button" 
+                    onclick="window.location='{{ route('customers.create') }}'" 
+                    class="flex items-center justify-center text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2"
+                    style="background-color: #4F2D13; hover:bg-opacity-90;"
+  
                     >
                         <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
